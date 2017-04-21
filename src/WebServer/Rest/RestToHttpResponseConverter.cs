@@ -2,6 +2,7 @@
 using Restup.Webserver.Http;
 using Restup.Webserver.Models.Contracts;
 using Restup.Webserver.Models.Schemas;
+using Restup.WebServer.Models.Schemas;
 using System;
 
 namespace Restup.Webserver.Rest
@@ -29,7 +30,16 @@ namespace Restup.Webserver.Rest
             if (response != null)
                 return GetDefaultContentResponse(response, restServerRequest);
 
-            return GetDefaultResponse(restResponse);
+
+            if (restResponse.StatusCode == 500)
+            {
+                var internalServerErrorResponse = restResponse as InternalServerErrorResponse;
+                return GetDefaultContentResponse(internalServerErrorResponse, restServerRequest);
+            }
+            else
+            {
+                return GetDefaultResponse(restResponse);
+            }
         }
 
         private static HttpServerResponse GetMethodNotAllowedResponse(MethodNotAllowedResponse methodNotAllowedResponse)
@@ -54,6 +64,20 @@ namespace Restup.Webserver.Rest
         }
 
         private HttpServerResponse GetDefaultContentResponse(IContentRestResponse response, RestServerRequest restReq)
+        {
+            var defaultResponse = GetDefaultResponse(response);
+
+            if (response.ContentData != null)
+            {
+                defaultResponse.ContentType = GetMediaTypeAsString(restReq.AcceptMediaType);
+                defaultResponse.ContentCharset = restReq.AcceptCharset;
+                defaultResponse.Content = _contentSerializer.ToAcceptContent(response.ContentData, restReq);
+            }
+
+            return defaultResponse;
+        }
+
+        private HttpServerResponse GetDefaultContentResponse(InternalServerErrorResponse response, RestServerRequest restReq)
         {
             var defaultResponse = GetDefaultResponse(response);
 

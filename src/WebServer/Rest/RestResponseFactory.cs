@@ -1,6 +1,7 @@
 ﻿using Restup.Webserver.Models.Contracts;
 using Restup.Webserver.Models.Schemas;
 using Restup.WebServer.Models.Schemas;
+using System;
 
 namespace Restup.Webserver.Rest
 {
@@ -23,9 +24,9 @@ namespace Restup.Webserver.Rest
 			return new WwwAuthenticateResponse(Realm);
 		}
 
-		internal IRestResponse CreateInternalServerError()
+		internal IRestResponse CreateInternalServerError(Exception ex)
 		{
-			return new InternalServerErrorResponse();
+			return new InternalServerErrorResponse(ex);
 		}
     }
 }
