@@ -4,6 +4,7 @@ using Restup.Webserver.InstanceCreators;
 using Restup.Webserver.Models.Schemas;
 using System;
 using System.Linq;
+using Restup.WebServer.Rest;
 
 namespace Restup.Webserver.Rest
 {
@@ -53,9 +54,13 @@ namespace Restup.Webserver.Rest
                 return _responseFactory.CreateBadRequest();
             }
 
-            return info.MethodInfo.Invoke(
-                    instantiator.Create(info.ControllerConstructor, info.ControllerConstructorArgs()),
-                    parameters);
+            var obj = instantiator.Create(info.ControllerConstructor, info.ControllerConstructorArgs());
+            if (obj is RestControllerBase)
+            {
+                (obj as RestControllerBase).Request = request.HttpServerRequest;
+            }
+
+            return info.MethodInfo.Invoke(obj, parameters);
         }
     }
 }
