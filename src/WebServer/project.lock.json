@@ -20319,7 +20319,7 @@
       ]
     },
     "Microsoft.NETCore.UniversalWindowsPlatform/6.0.2": {
-      "sha512": "1x37WPEc/7G4BedFtmSKCK9E1wVWm0BTgTBe7lv/LuN/5a48H8KpGLO5I0fmX51y5r/BXJNaLjpfDkH1i1j0rQ==",
+      "sha512": "7bSAODFSTYt1G3/mjyh9e5HufYQQL2GKbQzDiBTdIdHWAI1Y2jet4dSCuS22gC0I9///kV3Cmnwud/UtMPCKeg==",
       "type": "package",
       "path": "microsoft.netcore.universalwindowsplatform/6.0.2",
       "files": [
@@ -20708,7 +20708,7 @@
       ]
     },
     "Newtonsoft.Json/10.0.3": {
-      "sha512": "wBM7i7i3U2WX0ecor4zdVGvgrwFUjuigBoHKiL+nH39fCOpCPjBY3RDqJM32edvdyTAVdjzlccHsg41+/+zpSA==",
+      "sha512": "hSXaFmh7hNCuEoC4XNY5DrRkLDzYHqPx/Ik23R4J86Z7PE/Y6YidhG602dFVdLBRSdG6xp9NabH3dXpcoxWvww==",
       "type": "package",
       "path": "newtonsoft.json/10.0.3",
       "files": [
@@ -28104,7 +28104,8 @@
     "UAP,Version=v10.0.10240": []
   },
   "packageFolders": {
-    "C:\\Users\\thijs\\.nuget\\packages\\": {}
+    "C:\\Users\\thijs\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {}
   },
   "project": {
     "restore": {
@@ -28115,9 +28116,13 @@
       "packagesPath": "C:\\Users\\thijs\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\thijs\\Documents\\case-iot-gateway\\restup\\src\\WebServer\\obj\\",
       "projectStyle": "ProjectJson",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\"
+      ],
       "configFilePaths": [
         "C:\\Users\\thijs\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -28137,11 +28142,11 @@
       }
     },
     "dependencies": {
-      "Microsoft.ApplicationInsights": "2.4.0",
-      "Microsoft.ApplicationInsights.PersistenceChannel": "1.2.3",
-      "Microsoft.ApplicationInsights.WindowsApps": "1.1.1",
-      "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.2",
-      "Newtonsoft.Json": "10.0.3"
+      "Microsoft.ApplicationInsights": "[2.4.0, )",
+      "Microsoft.ApplicationInsights.PersistenceChannel": "[1.2.3, )",
+      "Microsoft.ApplicationInsights.WindowsApps": "[1.1.1, )",
+      "Microsoft.NETCore.UniversalWindowsPlatform": "[6.0.2, )",
+      "Newtonsoft.Json": "[10.0.3, )"
     },
     "frameworks": {
       "uap10.0.10240": {}
@@ -28166,5 +28171,23 @@
         "#import": []
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: Microsoft.ApplicationInsights.WindowsApps 1.1.1 requires Microsoft.ApplicationInsights (= 1.2.3) but version Microsoft.ApplicationInsights 2.4.0 was resolved.",
+      "libraryId": "Microsoft.ApplicationInsights",
+      "targetGraphs": [
+        "UAP,Version=v10.0.10240",
+        "UAP,Version=v10.0.10240/win10-arm",
+        "UAP,Version=v10.0.10240/win10-arm-aot",
+        "UAP,Version=v10.0.10240/win10-x64",
+        "UAP,Version=v10.0.10240/win10-x64-aot",
+        "UAP,Version=v10.0.10240/win10-x86",
+        "UAP,Version=v10.0.10240/win10-x86-aot"
+      ]
+    }
+  ]
 }
