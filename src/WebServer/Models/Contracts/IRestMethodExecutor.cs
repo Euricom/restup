@@ -6,6 +6,6 @@ namespace Restup.Webserver.Models.Contracts
 {
     interface IRestMethodExecutor
     {
-        Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri);
+        Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, object controller, RestServerRequest request, ParsedUri requestUri);
     }
 }

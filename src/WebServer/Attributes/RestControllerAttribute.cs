@@ -8,6 +8,11 @@ namespace Restup.Webserver.Attributes
     {
         public InstanceCreationType InstanceCreationType { get; }
 
+        public RestControllerAttribute()
+        {
+                
+        }
+
         public RestControllerAttribute(InstanceCreationType instanceCreation)
         {
             InstanceCreationType = instanceCreation;

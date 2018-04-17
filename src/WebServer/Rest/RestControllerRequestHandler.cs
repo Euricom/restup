@@ -93,12 +93,12 @@ namespace Restup.Webserver.Rest
             }
         }
 
-        private static bool HasRestResponse(MethodInfo m)
+        internal static bool HasRestResponse(MethodInfo m)
         {
             return m.ReturnType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
         }
 
-        private static bool HasAsyncRestResponse(MethodInfo m, Type type)
+        internal static bool HasAsyncRestResponse(MethodInfo m, Type type)
         {
             if (!m.ReturnType.IsConstructedGenericType)
                 return false;
@@ -179,7 +179,10 @@ namespace Restup.Webserver.Rest
 
             try
             {
-                return await restMethodExecutor.ExecuteMethodAsync(restMethod, req, parsedUri);
+                var instantiator = InstanceCreatorCache.Default.GetCreator(restMethod.MethodInfo.DeclaringType);
+                var obj = instantiator.Create(restMethod.ControllerConstructor, restMethod.ControllerConstructorArgs());
+
+                return await restMethodExecutor.ExecuteMethodAsync(restMethod, obj, req, parsedUri);
             }
             catch(Exception ex)
             {

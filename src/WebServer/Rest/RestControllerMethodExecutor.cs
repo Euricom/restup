@@ -1,5 +1,4 @@
-﻿using Restup.Webserver.InstanceCreators;
-using Restup.Webserver.Models.Schemas;
+﻿using Restup.Webserver.Models.Schemas;
 using System;
 using System.Linq;
 
@@ -14,10 +13,8 @@ namespace Restup.Webserver.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri)
+        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, object controller, RestServerRequest request, ParsedUri requestUri)
         {
-            var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
-
             object[] parameters;
             try
             {
@@ -28,9 +25,7 @@ namespace Restup.Webserver.Rest
                 return _responseFactory.CreateBadRequest();
             }
 
-            return info.MethodInfo.Invoke(
-                    instantiator.Create(info.ControllerConstructor, info.ControllerConstructorArgs()),
-                    parameters);
+            return info.MethodInfo.Invoke(controller, parameters);
         }
     }
 }

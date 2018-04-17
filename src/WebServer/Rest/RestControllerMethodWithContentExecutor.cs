@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Restup.Webserver.Http;
-using Restup.Webserver.InstanceCreators;
 using Restup.Webserver.Models.Schemas;
 using System;
 using System.Linq;
-using Restup.WebServer.Rest;
 
 namespace Restup.Webserver.Rest
 {
@@ -19,10 +17,8 @@ namespace Restup.Webserver.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri)
+        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, object controller, RestServerRequest request, ParsedUri requestUri)
         {
-            var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
-
             object contentObj = null;
             try
             {
@@ -44,7 +40,7 @@ namespace Restup.Webserver.Rest
                 return _responseFactory.CreateBadRequest();
             }
 
-            object[] parameters = null;
+            object[] parameters;
             try
             {
                 parameters = info.GetParametersFromUri(requestUri).Concat(new[] { contentObj }).ToArray();
@@ -54,13 +50,7 @@ namespace Restup.Webserver.Rest
                 return _responseFactory.CreateBadRequest();
             }
 
-            var obj = instantiator.Create(info.ControllerConstructor, info.ControllerConstructorArgs());
-            if (obj is RestControllerBase)
-            {
-                (obj as RestControllerBase).Request = request.HttpServerRequest;
-            }
-
-            return info.MethodInfo.Invoke(obj, parameters);
+            return info.MethodInfo.Invoke(controller, parameters);
         }
     }
 }

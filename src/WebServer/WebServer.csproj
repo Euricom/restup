@@ -152,6 +152,8 @@
     <Compile Include="Models\Schemas\RestResponse.cs" />
     <Compile Include="Models\Schemas\RestServerRequest.cs" />
     <Compile Include="Models\Schemas\WwwAuthenticateResponse.cs" />
+    <Compile Include="Rest\DependencyResolverRestControllerRequestHandler.cs" />
+    <Compile Include="Rest\DependencyResolverRouteHandler.cs" />
     <Compile Include="Rest\MatchUri.cs" />
     <Compile Include="Rest\ParameterValueGetter.cs" />
     <Compile Include="Rest\ParsedUri.cs" />

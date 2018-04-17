@@ -17,6 +17,12 @@ namespace Restup.Webserver.Rest
         public void Validate<T>(ImmutableArray<RestControllerMethodInfo> existingRestMethodCollection,
             IList<RestControllerMethodInfo> restControllerMethodInfos)
         {
+            Validate(typeof(T), existingRestMethodCollection, restControllerMethodInfos);
+        }
+
+        public void Validate(Type t, ImmutableArray<RestControllerMethodInfo> existingRestMethodCollection,
+            IList<RestControllerMethodInfo> restControllerMethodInfos)
+        {
             foreach (var restControllerMethodInfo in restControllerMethodInfos)
             {
                 // if the existing rest method collection already contains the rest controller method to be added 
@@ -25,7 +31,7 @@ namespace Restup.Webserver.Rest
                 if (existingRestMethodCollection.Contains(restControllerMethodInfo, _uniqueMatchUriAndVerbComparer)
                     || restControllerMethodInfos.Count(x => _uniqueMatchUriAndVerbComparer.Equals(x, restControllerMethodInfo)) > 1)
                 {
-                    throw new Exception($"Can't register route for controller {typeof(T)}, UriFormat with {restControllerMethodInfo.MatchUri} and {restControllerMethodInfo.Verb} since this would cause multiple routes to be registered on the same name.");
+                    throw new Exception($"Can't register route for controller {t}, UriFormat with {restControllerMethodInfo.MatchUri} and {restControllerMethodInfo.Verb} since this would cause multiple routes to be registered on the same name.");
                 }
             }
         }

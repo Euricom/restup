@@ -1,18 +1,22 @@
-using Restup.Webserver.Models;
 using Restup.Webserver.Models.Contracts;
 using Restup.Webserver.Models.Schemas;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Restup.WebServer.Rest;
 
 namespace Restup.Webserver.Rest
 {
     internal abstract class RestMethodExecutor : IRestMethodExecutor
     {
-        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri)
+        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, object controller, RestServerRequest request, ParsedUri requestUri)
         {
-            var methodInvokeResult = ExecuteAnonymousMethod(info, request, requestUri);
+            if (controller is RestControllerBase)
+            {
+                (controller as RestControllerBase).Request = request.HttpServerRequest;
+            }
+
+            var methodInvokeResult = ExecuteAnonymousMethod(info, controller, request, requestUri);
             switch (info.ReturnTypeWrapper)
             {
                 case RestControllerMethodInfo.TypeWrapper.None:
@@ -31,6 +35,6 @@ namespace Restup.Webserver.Rest
             return methodInvokeResult.AsTask();
         }
 
-        protected abstract object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri);
+        protected abstract object ExecuteAnonymousMethod(RestControllerMethodInfo info, object controller, RestServerRequest request, ParsedUri requestUri);
     }
 }
