@@ -1,16 +1,12 @@
 ﻿using Restup.HttpMessage;
 using Restup.HttpMessage.Models.Schemas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Restup.WebServer.Attributes;
 
 namespace Restup.WebServer.Models.Contracts
 {
 	public interface IAuthorizationProvider
 	{
 		string Realm { get; }
-		HttpResponseStatus Authorize(IHttpServerRequest request);
+	    HttpResponseStatus Authorize(IHttpServerRequest request, AuthorizeAttribute attribute = null);
 	}
 }
