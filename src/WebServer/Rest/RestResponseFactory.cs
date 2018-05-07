@@ -2,31 +2,46 @@
 using Restup.Webserver.Models.Schemas;
 using Restup.WebServer.Models.Schemas;
 using System;
+using Restup.HttpMessage;
 
 namespace Restup.Webserver.Rest
 {
+    public interface IExceptionHandler
+    {
+        IRestResponse Handle(IHttpServerRequest request, Exception exception);
+    }
+
     internal class RestResponseFactory
     {
-        private readonly BadRequestResponse _badRequestResponse;
+        private readonly IExceptionHandler _handler;
 
         internal RestResponseFactory()
+        { }
+
+        internal RestResponseFactory(IExceptionHandler handler)
         {
-            _badRequestResponse = new BadRequestResponse();
+            _handler = handler;
         }
 
         internal IRestResponse CreateBadRequest()
         {
-            return _badRequestResponse;
+            return new BadRequestResponse();
         }
 
-		internal IRestResponse CreateWwwAuthenticate(string Realm)
+		internal IRestResponse CreateWwwAuthenticate(string realm)
 		{
-			return new WwwAuthenticateResponse(Realm);
+			return new WwwAuthenticateResponse(realm);
 		}
 
-		internal IRestResponse CreateInternalServerError(Exception ex)
+		internal IRestResponse CreateExceptionResponse(IHttpServerRequest request, Exception ex)
 		{
-			return new InternalServerErrorResponse(ex);
+		    IRestResponse response = null;
+		    if (_handler != null)
+		    {
+		        response = _handler.Handle(request, ex);
+		    }
+
+			return response ?? new InternalServerErrorResponse(ex);
 		}
     }
 }

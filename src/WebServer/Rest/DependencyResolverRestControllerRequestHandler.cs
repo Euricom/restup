@@ -29,7 +29,7 @@ namespace Restup.Webserver.Rest
         {
             _resolve = resolve;
             _restMethodCollection = ImmutableArray<RestControllerMethodInfo>.Empty;
-            _responseFactory = new RestResponseFactory();
+            _responseFactory = new RestResponseFactory((IExceptionHandler)resolve(typeof(IExceptionHandler)));
             _methodExecuteFactory = new RestControllerMethodExecutorFactory();
             _uriParser = new UriParser();
             _restControllerMethodInfoValidator = new RestControllerMethodInfoValidator();
@@ -83,7 +83,7 @@ namespace Restup.Webserver.Rest
                 if (authorizationProvider == null)
                 {
                     _log.Error("HandleRequestAsync|AuthenticationProvider not configured");
-                    return _responseFactory.CreateInternalServerError(new Exception("HandleRequestAsync|AuthenticationProvider not configured"));
+                    return _responseFactory.CreateExceptionResponse(req.HttpServerRequest, new Exception("HandleRequestAsync|AuthenticationProvider not configured"));
                 }
                 var authResult = authorizationProvider.Authorize(req.HttpServerRequest, authAttribute);
                 if (authResult == HttpResponseStatus.Unauthorized)
@@ -102,9 +102,9 @@ namespace Restup.Webserver.Rest
             catch (Exception ex)
             {
                 if (ex.InnerException != null)
-                    return _responseFactory.CreateInternalServerError(ex.InnerException);
+                    return _responseFactory.CreateExceptionResponse(req.HttpServerRequest, ex.InnerException);
                 else
-                    return _responseFactory.CreateInternalServerError(new Exception(ex.Message));
+                    return _responseFactory.CreateExceptionResponse(req.HttpServerRequest, ex);
             }
         }
 

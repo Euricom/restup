@@ -34,6 +34,11 @@ namespace Restup.Webserver.Http
             if (configuration.CorsConfiguration != null)
                 _messageInspectors.Add(new CorsMessageInspector(configuration.CorsConfiguration.AllowedOrigins));
 
+            foreach (var inspector in configuration.MessageInspectors)
+            {
+                _messageInspectors.Add(inspector);
+            }
+
             _routes = new SortedSet<RouteRegistration>(configuration.Routes);
         }
 

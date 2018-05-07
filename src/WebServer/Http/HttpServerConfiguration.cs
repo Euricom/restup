@@ -10,6 +10,7 @@ namespace Restup.Webserver.Http
         public int ServerPort { get; private set; } = 80;
         internal CorsConfiguration CorsConfiguration { get; private set; }
         internal IEnumerable<RouteRegistration> Routes { get; private set; } = new RouteRegistration[] { };
+        internal List<IHttpMessageInspector> MessageInspectors { get; private set; } = new List<IHttpMessageInspector>();
 
         public HttpServerConfiguration ListenOnPort(int serverPort)
         {
@@ -75,6 +76,13 @@ namespace Restup.Webserver.Http
             }
 
             Routes = Routes.Concat(new[] { routeRegistration });
+            return this;
+        }
+
+        public HttpServerConfiguration RegisterCustomMessageInspector(IHttpMessageInspector inspector)
+        {
+            MessageInspectors.Add(inspector);
+
             return this;
         }
     }
